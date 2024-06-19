@@ -24,7 +24,7 @@ reg_user = r'^[1-9]|^\d+(,\d+)?E[+-]?\d+$'
 users = []
 index = 1
 user_index_mapping = {}
-lila = []
+lila = [] # almacena todas las filas del archivo CSV que corresponden al usuario seleccionado
 box_width = 36
 
 file_path = os.getenv('csv_file_route')
@@ -100,7 +100,7 @@ def dates_range(date_in, date_out):
 dates_range(date_in, date_out)
 
 data.seek(0) #coloca el puntero al principio del archivo
-pipa = [] #almacena los datos filtrados en una lista
+pipa = [] #almacena las filas filtradas que corresponden al usuario seleccionado y al rango de fechas especificado.
 
 for row in data_red:
     if row[3] == selected_user: 
