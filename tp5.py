@@ -4,6 +4,7 @@ import os
 import re
 from datetime import datetime, date, timedelta
 from colorama import Fore, init
+from openpyxl import Workbook
 
 class ExceptionDate(Exception):
     pass
@@ -29,15 +30,15 @@ box_width = 36
 file_path = os.getenv('csv_file_route')
 
 data = open(file_path, newline='')  
-data_red = csv.reader(data, delimiter=',')
+data_red = csv.reader(data, delimiter=',') #contiene los datos de la tabla de usuarios
 
 color_w = Fore.WHITE
 
-for row in data_red:
+for row in data_red: 
     # se agrega a una lista y diccionario los usuarios que no sean invitados y que no coincidan con la expresion regular
     if row[3] != 'Usuario' and row[3].lower() not in users and row[3] != 'invitado-deca' and not re.match(reg_user, row[3]):
         user_name = row[3].lower()
-        users.append(user_name)
+        users.append(user_name) #solo se agregan usuarios válidos
         user_index_mapping[index] = user_name  
         print(color_w + f"{index}. {row[3]}")
         index += 1
@@ -64,20 +65,15 @@ date_out = input(color + "Por favor ingrese la fecha del fin del rango (aaaa-mm-
 print(color_w + f"+{'-' * (box_width - 2)}+")
 
 def str_to_date(date_in, date_out):
-
     date_in_obj = datetime.strptime(date_in, "%Y-%m-%d").date()
     date_out_obj = datetime.strptime(date_out, "%Y-%m-%d").date()
-
     return date_in_obj, date_out_obj
 
 def validate_date(date_in, date_out):
-
     reg_date = r'^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$'
-
     date_in_obj, date_out_obj = str_to_date(date_in, date_out)
-
     if re.match(reg_date, date_in) and re.match(reg_date, date_out) and date_in_obj <= date_out_obj:
-        pass
+        pass #si todo es correcto, no hace nada
     else:
         raise ExceptionDate(color_bad + "Formato no válido de fechas. Ingrese nuevamente.")
     
@@ -96,25 +92,25 @@ dates = []
 
 def dates_range(date_in, date_out):
     date_in_obj, date_out_obj = str_to_date(date_in, date_out)
-    delta = timedelta(days=1)
+    delta = timedelta(days=1) #Para que se genere un rango de fechas de 1 día
     while date_in_obj <= date_out_obj:
         dates.append(date_in_obj.strftime("%Y-%m-%d"))
         date_in_obj += delta
 
 dates_range(date_in, date_out)
 
-data.seek(0)
-pipa = []
+data.seek(0) #coloca el puntero al principio del archivo
+pipa = [] #almacena los datos filtrados en una lista
 
 for row in data_red:
-    if row[3] == selected_user:
+    if row[3] == selected_user: 
         lila.append(row)
 
 for dat in dates:
     for row in lila:
         if row[6] == dat:
             modified_row = [row[3],row[6],row[7],row[8],row[9],row[13]]
-            pipa.append(modified_row)
+            pipa.append(modified_row) # se agrega la fila con los elementos especificados a la lista pipa
 
 
 color = Fore.YELLOW
@@ -132,7 +128,16 @@ else:
     print(Fore.RESET)
     for row in pipa:
         print(f"{row[0]:<20}{row[1]:<25}{row[2]:<15}{row[3]:<25}{row[4]:<15}{row[5]:<15}")
+    wb = Workbook()
+    ws = wb.active
+    ws.append(['Usuario', 'Fecha Conexión Inicio', 'Hora Inicio', 'Fecha Conexión Fin', 'Hora Fin', 'MAC AP'])
 
+    for row in pipa:
+        ws.append(row)
+
+    excel_file_path = 'filtered_data.xlsx'
+    wb.save(excel_file_path)
+    print(f"\nDatos filtrados exportados exitosamente a '{excel_file_path}'")
 print("\n")
 
 data.close() 
