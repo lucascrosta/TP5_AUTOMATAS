@@ -14,15 +14,16 @@ def load_users(data_red, reg_user):
     return users, user_index_mapping
 
 def get_user_data(data_red, selected_user):
-    lila = []
+    lila = [] # almacena todas las filas del archivo CSV que corresponden al usuario seleccionado
     for row in data_red:
         if row[3] == selected_user:
             row[6] = change_date_format(row[6])
+            row[8] = change_date_format(row[8])  
             lila.append(row)
     return lila
 
 def filter_user_data(lila, dates):
-    pipa = []
+    pipa = [] #almacena las filas filtradas que corresponden al usuario seleccionado y al rango de fechas especificado.
     for dat in dates:
         for row in lila:
             if row[6] == dat:

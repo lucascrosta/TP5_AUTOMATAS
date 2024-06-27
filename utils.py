@@ -50,22 +50,3 @@ def dates_range(date_in, date_out):
         dates.append(date_in_obj.strftime("%d-%m-%Y"))
         date_in_obj += delta
     return dates
-
-# Funciones auxiliares para obtener y filtrar datos del usuario
-def get_user_data(data_red, selected_user):
-    lila = [] # almacena todas las filas del archivo CSV que corresponden al usuario seleccionado
-    for row in data_red:
-        if row[3] == selected_user:
-            row[6] = change_date_format(row[6])
-            row[8] = change_date_format(row[8])  
-            lila.append(row)
-    return lila
-
-def filter_user_data(lila, dates):
-    pipa = [] #almacena las filas filtradas que corresponden al usuario seleccionado y al rango de fechas especificado.
-    for dat in dates:
-        for row in lila:
-            if row[6] == dat:
-                modified_row = [row[3], row[6], row[7], row[8], row[9], row[13]]
-                pipa.append(modified_row)
-    return pipa
