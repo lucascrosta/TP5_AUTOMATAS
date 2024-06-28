@@ -10,6 +10,12 @@ from utils import *
 from data_processing import *
 
 def main():
+    """
+    Función principal del programa. 
+    Carga los datos de los usuarios desde un archivo CSV, permite al usuario seleccionar un usuario y un rango de fechas,
+    y filtra y muestra los datos correspondientes. También permite exportar los datos filtrados a un archivo Excel.
+    """
+
     load_dotenv()
 
     reg_user = r'^[1-9]|^\d+(,\d+)?E[+-]?\d+$'
@@ -77,7 +83,7 @@ def main():
         color = Fore.YELLOW
         color_title = Fore.LIGHTMAGENTA_EX
 
-        # Imprimir los datos formateados en forma de tabla
+
         if len(pipa) == 0:
             print("El usuario no tuvo sesiones activas en las instalaciones en el rango seleccionado")
         else:
@@ -111,8 +117,8 @@ def main():
                 break  # Rompe el bucle interno y vuelve al inicio del bucle principal para seleccionar otro usuario
             elif choice == '3':
                 while True:
-                    date_in = input(color + "Por favor ingrese la fecha de inicio del rango (dd-mm-aaaa): ")
-                    date_out = input(color + "Por favor ingrese la fecha del fin del rango (dd-mm-aaaa): ")
+                    date_in = input(Fore.CYAN + "Por favor ingrese la fecha de inicio del rango (dd-mm-aaaa): ")
+                    date_out = input(Fore.CYAN + "Por favor ingrese la fecha del fin del rango (dd-mm-aaaa): ")
                     print(color_w + f"+{'-' * (box_width - 2)}+")
                     try:
                         validate_date(date_in, date_out)
@@ -140,7 +146,7 @@ def main():
                         print(f"{row[0]:<20}{row[1]:<25}{row[2]:<15}{row[3]:<25}{row[4]:<15}{row[5]:<15}")
             elif choice == '4':
                 print(Fore.WHITE + "Saliendo...")
-                return  # Sale de la función main() y termina el programa
+                return 
             else:
                 print("Opción no válida. Intente nuevamente.")
 

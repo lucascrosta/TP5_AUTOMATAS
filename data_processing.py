@@ -2,6 +2,18 @@ import re
 from utils import change_date_format
 
 def load_users(data_red, reg_user):
+    """
+    Carga y filtra una lista de usuarios únicos desde los datos proporcionados.
+
+    Args:
+        data_red (list): Lista de listas donde cada sublista representa una fila de datos.
+        reg_user (str): Expresión regular para validar usuarios.
+
+    Returns:
+        tuple: 
+            list: Lista de nombres de usuarios únicos en minúsculas.
+            dict: Diccionario que mapea índices a nombres de usuarios.
+    """
     users = []
     user_index_mapping = {}
     index = 1
@@ -13,17 +25,39 @@ def load_users(data_red, reg_user):
             index += 1
     return users, user_index_mapping
 
+
 def get_user_data(data_red, selected_user):
-    lila = [] # almacena todas las filas del archivo CSV que corresponden al usuario seleccionado
+    """
+    Obtiene los datos del usuario seleccionado del archivo CSV.
+
+    Args:
+        data_red (list): Lista de listas donde cada sublista representa una fila de datos.
+        selected_user (str): Nombre del usuario seleccionado.
+
+    Returns:
+        list: Lista de filas que corresponden al usuario seleccionado con fechas formateadas.
+    """
+    lila = [] 
     for row in data_red:
         if row[3] == selected_user:
             row[6] = change_date_format(row[6])
-            row[8] = change_date_format(row[8])  
+            row[8] = change_date_format(row[8])
             lila.append(row)
     return lila
 
+
 def filter_user_data(lila, dates):
-    pipa = [] #almacena las filas filtradas que corresponden al usuario seleccionado y al rango de fechas especificado.
+    """
+    Filtra los datos del usuario seleccionado según el rango de fechas especificado.
+
+    Args:
+        lila (list): Lista de filas que corresponden al usuario seleccionado.
+        dates (list): Lista de fechas en el formato 'dd-mm-aaaa' para filtrar.
+
+    Returns:
+        list: Lista de filas filtradas que corresponden al usuario seleccionado y al rango de fechas especificado.
+    """
+    pipa = []  
     for dat in dates:
         for row in lila:
             if row[6] == dat:
