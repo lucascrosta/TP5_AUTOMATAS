@@ -67,11 +67,16 @@ def main():
             try:
                 validate_date(date_in, date_out)
                 break
+            except MissingEndDate as e:
+                print(e)
+                continue
             except ExceptionDate as e:
                 print(e)
                 date_in = input(color + "Por favor ingrese la fecha de inicio del rango (dd-mm-aaaa): ")
                 date_out = input(color + "Por favor ingrese la fecha del fin del rango (dd-mm-aaaa): ")
 
+        # if not date_out:
+        #     continue  # Volver al menú si no hay fecha de fin
         dates = dates_range(date_in, date_out)
 
         with open(file_path, newline='') as data:

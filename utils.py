@@ -6,6 +6,10 @@ class ExceptionDate(Exception):
     """Excepción personalizada para manejar errores de formato de fecha."""
     pass
 
+class MissingEndDate(Exception):
+    """Excepción personalizada para manejar filas sin fecha de fin."""
+    pass
+
 def menu():
     """
     Muestra el menú de bienvenida y la lista de usuarios en la consola con color cian.
@@ -29,13 +33,17 @@ def change_date_format(date_str):
 
     Raises:
         ExceptionDate: Si el formato de la fecha no es válido.
+        MissingEndDate: Si la fecha es una cadena vacía.
     """
+    if not date_str:
+        raise MissingEndDate(Fore.RED + "No existe fecha de fin. Por favor, ingrese una fecha de fin válida.")
+    
+    # Verificar manualmente el formato de la fecha
     try:
         date_obj = datetime.strptime(date_str, "%Y-%m-%d")
         return date_obj.strftime("%d-%m-%Y")
-    except ValueError:
+    except:
         raise ExceptionDate(Fore.RED + f"Formato no válido para la fecha: {date_str}. Ingrese nuevamente.")
-
 
 def str_to_date(date_in, date_out):
     """
@@ -50,7 +58,9 @@ def str_to_date(date_in, date_out):
 
     Raises:
         ExceptionDate: Si el formato de las fechas no es válido.
+        MissingEndDate: Si la fecha de fin está vacía.
     """
+    
     try:
         date_in_obj = datetime.strptime(date_in, "%d-%m-%Y").date()
         date_out_obj = datetime.strptime(date_out, "%d-%m-%Y").date()
