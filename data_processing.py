@@ -1,5 +1,6 @@
 import re
 from utils import change_date_format
+from utils import ExceptionDate, MissingEndDate
 
 def load_users(data_red, reg_user):
     """
@@ -36,14 +37,25 @@ def get_user_data(data_red, selected_user):
 
     Returns:
         list: Lista de filas que corresponden al usuario seleccionado con fechas formateadas.
+    
+    Raises:
+        ExceptionDate: Si el formato de la fecha no es válido.
+        MissingEndDate: Si la fecha es una cadena vacía.
     """
     lila = [] 
     for row in data_red:
         if row[3] == selected_user:
-            row[6] = change_date_format(row[6])
-            row[8] = change_date_format(row[8])
+            try:
+                row[6] = change_date_format(row[6])
+                row[8] = change_date_format(row[8])
+            except ExceptionDate as e:
+                print(e)
+                return lila, False
+            except MissingEndDate as e:
+                print(e)
+                return lila, False
             lila.append(row)
-    return lila
+    return lila, True
 
 
 def filter_user_data(lila, dates):

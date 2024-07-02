@@ -36,7 +36,7 @@ def change_date_format(date_str):
         MissingEndDate: Si la fecha es una cadena vacía.
     """
     if not date_str:
-        raise MissingEndDate(Fore.RED + "No existe fecha de fin. Por favor, ingrese una fecha de fin válida.")
+        raise MissingEndDate(Fore.RED + "No existe fecha de fin. Por favor, elija otro usuario que si tenga una fecha de fin válida.")
     
     # Verificar manualmente el formato de la fecha
     try:

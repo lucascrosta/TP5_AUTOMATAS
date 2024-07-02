@@ -67,21 +67,20 @@ def main():
             try:
                 validate_date(date_in, date_out)
                 break
-            except MissingEndDate as e:
-                print(e)
-                continue
             except ExceptionDate as e:
                 print(e)
                 date_in = input(color + "Por favor ingrese la fecha de inicio del rango (dd-mm-aaaa): ")
                 date_out = input(color + "Por favor ingrese la fecha del fin del rango (dd-mm-aaaa): ")
 
-        # if not date_out:
-        #     continue  # Volver al menú si no hay fecha de fin
         dates = dates_range(date_in, date_out)
 
         with open(file_path, newline='') as data:
-            data_red = csv.reader(data, delimiter=',')
-            lila = get_user_data(data_red, selected_user)
+            data_red = csv.reader(data, delimiter=',')  # Contiene los datos de la tabla de usuarios
+            lila, state = get_user_data(data_red, selected_user)
+
+        if not state:
+            input("Presione [ENTER] para continuar...")
+            continue  # Volver al menú si no hay fecha de fin
 
         pipa = filter_user_data(lila, dates)
 
@@ -90,7 +89,7 @@ def main():
 
 
         if len(pipa) == 0:
-            print("El usuario no tuvo sesiones activas en las instalaciones en el rango seleccionado")
+            print(Fore.WHITE + "El usuario no tuvo sesiones activas en las instalaciones en el rango seleccionado")
         else:
             print(color + "\n==================================== DATOS ====================================")
             print(Fore.RESET)
