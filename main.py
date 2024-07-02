@@ -134,6 +134,8 @@ def main():
                 with open(file_path, newline='') as data:
                     data_red = csv.reader(data, delimiter=',')
                     lila = get_user_data(data_red, selected_user)
+                if not state:
+                    input("Ha ocurrido un error inesperado")
 
                 pipa = filter_user_data(lila, dates)
                 color = Fore.YELLOW
